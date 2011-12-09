@@ -1,0 +1,8 @@
+useDynLib(infeR)
+
+export(simulate.coalescent)
+export(simulate.inference.model)
+export(fst)
+export(expected.fst)
+export(maximum.likelihood)
+export(run.mcmc)
