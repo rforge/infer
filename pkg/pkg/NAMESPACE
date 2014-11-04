@@ -1,8 +1,14 @@
 useDynLib(infeR)
 
-export(simulate.coalescent)
-export(simulate.inference.model)
+export(sim.coalescent)
+export(sim.inference.model)
 export(fst)
 export(expected.fst)
 export(maximum.likelihood)
 export(run.mcmc)
+
+import(coda)
+import(fields)
+import(locfit)
+import(MASS)
+import(methods)

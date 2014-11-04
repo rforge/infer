@@ -63,7 +63,7 @@ log.beta.binomial <- function(n,k,M,pi) {
 	return(result)
 }
 
-simulate.inference.model <- function(number.of.sampled.demes,sample.sizes,M,pi) {
+sim.inference.model <- function(number.of.sampled.demes,sample.sizes,M,pi) {
 	number.of.loci <- length(pi)
 	counts <- matrix(nrow = number.of.loci,ncol = number.of.sampled.demes)
 	X <- vector(mode = "numeric",length = number.of.sampled.demes)
@@ -111,7 +111,7 @@ fst <- function(sample) {
 	return(result)	
 }
  
-simulate.coalescent <- function(total.number.of.demes,effective.size,migration.rate,mutation.rate,number.of.sampled.demes,sample.sizes,number.of.loci) {
+sim.coalescent <- function(total.number.of.demes,effective.size,migration.rate,mutation.rate,number.of.sampled.demes,sample.sizes,number.of.loci) {
 
 	SimulateCoalescentTree(total.number.of.demes,effective.size,migration.rate,mutation.rate,number.of.sampled.demes,sample.sizes,number.of.loci)	
 	counts <- as.matrix(read.table("tmp.dat"))
@@ -157,7 +157,7 @@ maximum.likelihood <- function(sample,alpha = 0.05,M = seq(0.1,9.99,0.1),pi = se
 		plot.new()
 # Top left:
 		par(new = "TRUE",plt = c(0.925,0.945,0.125,0.4),cex.axis = 0.6,las = 1,mgp = c(2.5,0.75,0))
-		filled.legend(M,pi,z,color = migraine.colors)
+		filled.legend(M,pi,z,color.palette = migraine.colors)
 		par(new = "TRUE",plt = c(0.1,0.45,0.625,0.9),cex.axis = 0.83, cex.lab = 0.83,mgp = c(2.5,1,0))
 		surface <- persp(M,pi,z,theta = 30,phi = 30,expand = 0.5,col = "lightblue",ltheta = 60,shade = 0.25,ticktype = "detailed",xlab = "M",ylab = "pi",zlab = "",main = "Log(likelihood)")
 		points(trans3d(M[max.M.idx],pi[max.pi.idx],max(z),pmat = surface),col = "red",pch = 3)
@@ -182,7 +182,7 @@ maximum.likelihood <- function(sample,alpha = 0.05,M = seq(0.1,9.99,0.1),pi = se
  		abline(v = M[max.M.idx],lty = 3,col = "red")
 # Bottom right:
 		par(new = "TRUE",plt = c(0.6,0.9,0.125,0.4),cex.axis = 0.83, cex.lab = 0.83,las = 0,mgp = c(2.5,1,0))
-		filled.contour3(M,pi,z,color = migraine.colors,main = "Log(likelihood)",xlab = bquote(.(italic(M)~"= 2"~italic(N)[e]~italic(m))),ylab = expression(pi))
+		filled.contour3(M,pi,z,color.palette = migraine.colors,main = "Log(likelihood)",xlab = bquote(.(italic(M)~"= 2"~italic(N)[e]~italic(m))),ylab = expression(pi))
 		contour(M,pi,z,xlab = "M",ylab = "pi",col = "white",add = TRUE)
 		points(M[which(z == max(z), arr.ind=TRUE)[1]],pi[which(z == max(z), arr.ind=TRUE)[2]],col = "white",pch = 3,lwd = 1)
 		if (!missing(true.M) & !missing(true.pi)) {
@@ -192,9 +192,9 @@ maximum.likelihood <- function(sample,alpha = 0.05,M = seq(0.1,9.99,0.1),pi = se
 		plot.new()
 # Top left: 
 		par(new = "TRUE",plt = c(0.425,0.445,0.625,0.9),cex.axis = 0.6,las = 1,mgp = c(2.5,0.75,0))
-		filled.legend(M,pi,likelihood.ratio,color = migraine.colors,zlim = c(0,1))
+		filled.legend(M,pi,likelihood.ratio,color.palette = migraine.colors,zlim = c(0,1))
 		par(new = "TRUE",plt = c(0.1,0.4,0.625,0.9),cex.axis = 0.83, cex.lab = 0.83,mgp = c(2.5,1,0))
-		filled.contour3(M,pi,likelihood.ratio,color = migraine.colors,main = "Likelihood ratio", xlab = bquote(.(italic(M)~"= 2"~italic(N)[e]~italic(m))),ylab = expression(pi))
+		filled.contour3(M,pi,likelihood.ratio,color.palette = migraine.colors,main = "Likelihood ratio", xlab = bquote(.(italic(M)~"= 2"~italic(N)[e]~italic(m))),ylab = expression(pi))
 		points(M[which(z == max(z), arr.ind=TRUE)[1]],pi[which(z == max(z), arr.ind=TRUE)[2]],col = "white",pch = 3,lwd = 1)
 		contour(M,pi,likelihood.ratio,xlab = "M",ylab = "pi",col = "white",add = TRUE)
 		if (!missing(true.M) & !missing(true.pi)) {
@@ -222,7 +222,7 @@ maximum.likelihood <- function(sample,alpha = 0.05,M = seq(0.1,9.99,0.1),pi = se
  		abline(h = exp(-qchisq(p = alpha,df = 1,lower.tail = FALSE) / 2),lty = 3,col = "blue")
 # Bottom right:
 		par(new = "TRUE",plt = c(0.6,0.95,0.125,0.4),cex.axis = 0.83, cex.lab = 0.83,las = 0,mgp = c(2.5,1,0))
-		filled.contour3(M,pi,likelihood.ratio.pvalue,color = migraine.colors,main = "2D confidence interval", xlab = bquote(.(italic(M)~"= 2"~italic(N)[e]~italic(m))),ylab = expression(pi))
+		filled.contour3(M,pi,likelihood.ratio.pvalue,color.palette = migraine.colors,main = "2D confidence interval", xlab = bquote(.(italic(M)~"= 2"~italic(N)[e]~italic(m))),ylab = expression(pi))
 		points(M[which(z == max(z), arr.ind=TRUE)[1]],pi[which(z == max(z), arr.ind=TRUE)[2]],col = "white",pch = 3,lwd = 1)
 		if (!missing(true.M) & !missing(true.pi)) {
 			points(true.M,true.pi,col = "white",pch = 1)
@@ -312,7 +312,7 @@ run.mcmc <- function(sample,chain.length = 1000,burnin = 0,range.M = c(0.001,10)
 			if (!missing(true.M) & !missing(true.pi)) {
 				points(trans3d(true.M,true.pi,max(z$z),pmat = surface),col = "red",pch = 1)
 			}
-			filled.contour3(z,color = migraine.colors,main = "Posterior density",xlab = bquote(.(italic(M)~"= 2"~italic(N)[e]~italic(m))),ylab = expression(pi))
+			filled.contour3(z,color.palette = migraine.colors,main = "Posterior density",xlab = bquote(.(italic(M)~"= 2"~italic(N)[e]~italic(m))),ylab = expression(pi))
 			contour(z,col = "white",levels = c(alpha),labels = c(paste(toString((1 - alpha) * 100),"%",sep = "")),add = TRUE)
 			points(z$x[which(z$z == max(z$z),arr.ind = TRUE)[1]],z$y[which(z$z == max(z$z),arr.ind = TRUE)[2]],col = "white",pch = 3,lwd = 1)
 			if (!missing(true.M) & !missing(true.pi)) {
