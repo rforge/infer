@@ -1,12 +1,12 @@
-\name{simulate.inference.model}
-\Rdversion{0.3}
-\alias{simulate.inference.model}
+\name{sim.inference.model}
+\Rdversion{0.4}
+\alias{sim.inference.model}
 \title{Simulate a Sample of Genes}
 \description{
 Simulate a sample of genes.
 }
 \usage{
-  simulate.inference.model(number.of.sampled.demes,sample.sizes,M,pi)
+  sim.inference.model(number.of.sampled.demes,sample.sizes,M,pi)
 }
 \arguments{
   \item{number.of.sampled.demes}{number of demes sampled}
@@ -23,6 +23,6 @@ Simulate a sample of genes, using a diffusion approximation for the probability 
 \examples{
 ## This is to simulate a sample of genes.
 
-sample <- simulate.inference.model(number.of.sampled.demes = 10,sample.sizes = 50,M = 2,pi = runif(2))
+sample <- sim.inference.model(number.of.sampled.demes = 10,sample.sizes = 50,M = 2,pi = runif(2))
 sample
 }
