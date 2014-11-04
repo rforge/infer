@@ -6,7 +6,8 @@
 Simulate a sample of genes using the coalescent.
 }
 \usage{
-  sim.coalescent(total.number.of.demes,effective.size,migration.rate,mutation.rate,number.of.sampled.demes,sample.sizes,number.of.loci)
+sim.coalescent(total.number.of.demes,effective.size,migration.rate,mutation.rate,
+  	number.of.sampled.demes,sample.sizes,number.of.loci)
 }
 \arguments{
   \item{total.number.of.demes}{total number of demes in the island model}
