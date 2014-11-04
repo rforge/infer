@@ -1,5 +1,5 @@
 \name{fst}
-\Rdversion{0.2}
+\Rdversion{0.3}
 \alias{fst}
 \title{Compute the \eqn{F_{ST}} for a Sample of Genes}
 \description{

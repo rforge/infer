@@ -47,8 +47,14 @@ filled.contour3 <-
     stop("no proper 'z' matrix specified")
   if (!is.double(z)) 
     storage.mode(z) <- "double"
-  .Internal(filledcontour(as.double(x), as.double(y), z, as.double(levels), 
-                          col = col))
+# RV - 10-03-2012
+# note replacement of .Internal(filledcontour(as.double(x),...)
+# with .filled.contour() as of R-2.15.0
+  .filled.contour(as.double(x), as.double(y), z, as.double(levels), 
+                          col = col)
+
+                          
+                          
   if (missing(plot.axes)) {
     if (axes) {
       title(main = "", xlab = "", ylab = "")

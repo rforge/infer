@@ -1,5 +1,5 @@
 Package: infeR
-Version: 0.2
+Version: 0.3
 Date: 2012-03-13
 Title: A pedagogical tool to teach the basics of inference in
         population genetics
@@ -8,3 +8,7 @@ Maintainer: Renaud Vitalis <vitalis@supagro.inra.fr>
 Depends: coda,fields,locfit,methods,MASS
 Description: This package is intended to  provide a pedagogical tool to teach the basics inference in population genetics. It enables to simulate data in an island model of population structure, and to estimate the model parameters by means of maximum likelihood and Markov chain Monte Carlo (MCMC) algorithms.
 License: GPL (>= 2)
+Repository: R-Forge
+Repository/R-Forge/Project: infer
+Repository/R-Forge/Revision: 3
+Packaged: 2013-06-17 11:33:12 UTC; Renaud
