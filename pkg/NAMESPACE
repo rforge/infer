@@ -1,11 +1,13 @@
 useDynLib(infeR)
 
-export(sim.coalescent)
-export(sim.inference.model)
 export(fst)
 export(expected.fst)
+export(generate.prior)
 export(maximum.likelihood)
 export(run.mcmc)
+export(sim.coalescent)
+export(sim.inference.model)
+export(sim.island.model)
 
 import(coda)
 import(fields)
