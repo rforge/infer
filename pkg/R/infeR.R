@@ -29,6 +29,17 @@ SimulateCoalescentTree <- function(total.number.of.demes,effective.size,migratio
 	PACKAGE = 'infeR')
 }
 
+SimulateIslandModel <- function(number.of.simulations,mutation.model,total.number.of.demes,number.of.loci,number.of.sampled.demes,sample.sizes) {
+	.C('SimulateIslandModel',
+	as.integer(number.of.simulations),
+	as.integer(mutation.model),
+	as.integer(total.number.of.demes),
+	as.integer(number.of.loci),
+	as.integer(number.of.sampled.demes),
+	as.integer(sample.sizes),
+	PACKAGE = 'infeR')
+}
+
 migraine.colors <- function (n = 64,redshift = 1) { ## added redshift to tim.colors to control the amount of red...
 	orig <- c(	"#00008F", "#00009F", "#0000AF", "#0000BF", "#0000CF",
 				"#0000DF", "#0000EF", "#0000FF", "#0010FF", "#0020FF",
@@ -112,7 +123,6 @@ fst <- function(sample) {
 }
  
 sim.coalescent <- function(total.number.of.demes,effective.size,migration.rate,mutation.rate,number.of.sampled.demes,sample.sizes,number.of.loci) {
-
 	SimulateCoalescentTree(total.number.of.demes,effective.size,migration.rate,mutation.rate,number.of.sampled.demes,sample.sizes,number.of.loci)	
 	counts <- as.matrix(read.table("tmp.dat"))
 	file.remove("tmp.dat")
@@ -122,6 +132,50 @@ sim.coalescent <- function(total.number.of.demes,effective.size,migration.rate,m
 	sample@sample.sizes <- sample.sizes
 	sample@counts <- counts
 	return(sample)		
+}
+
+generate.prior <- function(number.of.simulations,prior.theta,min.theta,max.theta,prior.M,min.M,max.M) {
+	if (prior.theta == "UNI") {
+		theta <- runif(number.of.simulations,min = min.theta,max = max.theta)
+	}
+	else if (prior.theta == "LOG") {
+		theta <- exp(runif(number.of.simulations,min = log(min.theta),max = log(max.theta)))
+	}
+	else {
+		stop("Unknown prior for theta (must be one of 'UNI' or 'LOG')...")
+	}
+	if (prior.M == "UNI") {
+		M <- runif(number.of.simulations,min = min.M,max = max.M)
+	}
+	else if (prior.M == "LOG") {
+		M <- exp(runif(number.of.simulations,min = log(min.M),max = log(max.M)))
+	}
+	else {
+		stop("Unknown prior for theta (must be one of 'UNI' or 'LOG')...")
+	}
+	prior <- as.matrix(cbind(theta,M))
+	write.table(file = "prior_val.in",prior,col.names = FALSE,row.names = FALSE,quote = FALSE)
+	return(prior)
+}
+
+sim.island.model <- function(number.of.simulations,mutation.model,total.number.of.demes,number.of.loci,number.of.sampled.demes,sample.sizes) {
+	if (mutation.model == "IAM") {
+		mutation.model = 0
+	}
+	else if (mutation.model == "KAM") {
+		mutation.model = 1
+	}
+	else if (mutation.model == "SMM") {
+		mutation.model = 2
+	}
+	else {
+		stop("Unknown mutation model (must be one of 'IAM', 'KAM', or 'SMM')...")
+	}
+	SimulateIslandModel(number.of.simulations,mutation.model,total.number.of.demes,number.of.loci,number.of.sampled.demes,sample.sizes)
+	summary_stats <- as.matrix(read.table("sim_stats.out",header = TRUE))
+	file.remove("prior_val.in")
+	file.remove("sim_stats.out")
+	return(summary_stats)		
 }
 
 maximum.likelihood <- function(sample,alpha = 0.05,M = seq(0.1,9.99,0.1),pi = seq(0.01,0.99,0.01),graphics = TRUE,true.M,true.pi) {
