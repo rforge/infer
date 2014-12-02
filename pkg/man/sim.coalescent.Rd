@@ -1,5 +1,5 @@
 \name{sim.coalescent}
-\Rdversion{0.4}
+\Rdversion{0.6}
 \alias{sim.coalescent}
 \title{Simulate a Sample of Genes Using the Coalescent}
 \description{

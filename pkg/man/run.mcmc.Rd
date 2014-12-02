@@ -1,5 +1,5 @@
 \name{run.mcmc}
-\Rdversion{0.4}
+\Rdversion{0.6}
 \alias{run.mcmc}
 \title{Perform a Bayesian Analysis of a Sample of Genes in a Subdivided Population}
 \description{

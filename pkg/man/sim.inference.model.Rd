@@ -1,5 +1,5 @@
 \name{sim.inference.model}
-\Rdversion{0.4}
+\Rdversion{0.6}
 \alias{sim.inference.model}
 \title{Simulate a Sample of Genes}
 \description{

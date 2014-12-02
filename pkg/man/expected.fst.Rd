@@ -1,5 +1,5 @@
 \name{expected.fst}
-\Rdversion{0.4}
+\Rdversion{0.6}
 \alias{expected.fst}
 \title{Compute the Expected \eqn{F_{ST}}}
 \description{

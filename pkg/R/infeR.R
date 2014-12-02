@@ -204,8 +204,8 @@ maximum.likelihood <- function(sample,alpha = 0.05,M = seq(0.1,9.99,0.1),pi = se
 	likelihood.ratio.M.pvalue <- pchisq(-2 * (profile.M - max(profile.M)),df = 1,lower.tail = FALSE)
 	max.pi.idx <- which(profile.pi == max(profile.pi), arr.ind=TRUE)
 	max.M.idx <- which(profile.M == max(profile.M), arr.ind=TRUE)
-	pi.limits <- range(pi[likelihood.ratio.pi.pvalue >= alpha])
-	M.limits <- range(M[likelihood.ratio.M.pvalue >= alpha])
+	pi.limits <- range(pi[likelihood.ratio.pi.pvalue >= alpha / 2])
+	M.limits <- range(M[likelihood.ratio.M.pvalue >= alpha / 2])
 	if (graphics) {
 		dev.new()
 		plot.new()
