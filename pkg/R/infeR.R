@@ -3,6 +3,7 @@ library(MASS)				# Needed for run.mcmc()
 library(locfit)				# Needed for run.mcmc()
 library(fields)				# Needed for migraine.colors()
 library(ade4)
+library(lattice)
 
 setClass(Class = "sample",
 	representation(	sample.sizes = "numeric",
