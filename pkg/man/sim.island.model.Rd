@@ -1,5 +1,5 @@
 \name{sim.island.model}
-\Rdversion{0.6}
+\Rdversion{0.7}
 \alias{sim.island.model}
 \title{Simulate Artificial Data from an Island Model}
 \description{

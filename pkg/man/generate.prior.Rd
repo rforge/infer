@@ -1,5 +1,5 @@
 \name{generate.prior}
-\Rdversion{0.6}
+\Rdversion{0.7}
 \alias{generate.prior}
 \title{Generate Prior Values for the Parameters theta and M}
 \description{

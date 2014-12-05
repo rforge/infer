@@ -1,5 +1,5 @@
 \name{maximum.likelihood}
-\Rdversion{0.6}
+\Rdversion{0.7}
 \alias{maximum.likelihood}
 \title{Perform a Maximum-Likelihood Analysis of a Sample of Genes in a Subdivided Population}
 \description{

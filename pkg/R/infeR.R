@@ -2,6 +2,7 @@ library(coda)				# Needed for run.mcmc()
 library(MASS)				# Needed for run.mcmc()
 library(locfit)				# Needed for run.mcmc()
 library(fields)				# Needed for migraine.colors()
+library(ade4)
 
 setClass(Class = "sample",
 	representation(	sample.sizes = "numeric",
@@ -132,50 +133,6 @@ sim.coalescent <- function(total.number.of.demes,effective.size,migration.rate,m
 	sample@sample.sizes <- sample.sizes
 	sample@counts <- counts
 	return(sample)		
-}
-
-generate.prior <- function(number.of.simulations,prior.theta,min.theta,max.theta,prior.M,min.M,max.M) {
-	if (prior.theta == "UNI") {
-		theta <- runif(number.of.simulations,min = min.theta,max = max.theta)
-	}
-	else if (prior.theta == "LOG") {
-		theta <- exp(runif(number.of.simulations,min = log(min.theta),max = log(max.theta)))
-	}
-	else {
-		stop("Unknown prior for theta (must be one of 'UNI' or 'LOG')...")
-	}
-	if (prior.M == "UNI") {
-		M <- runif(number.of.simulations,min = min.M,max = max.M)
-	}
-	else if (prior.M == "LOG") {
-		M <- exp(runif(number.of.simulations,min = log(min.M),max = log(max.M)))
-	}
-	else {
-		stop("Unknown prior for theta (must be one of 'UNI' or 'LOG')...")
-	}
-	prior <- as.matrix(cbind(theta,M))
-	write.table(file = "prior_val.in",prior,col.names = FALSE,row.names = FALSE,quote = FALSE)
-	return(prior)
-}
-
-sim.island.model <- function(number.of.simulations,mutation.model,total.number.of.demes,number.of.loci,number.of.sampled.demes,sample.sizes) {
-	if (mutation.model == "IAM") {
-		mutation.model = 0
-	}
-	else if (mutation.model == "KAM") {
-		mutation.model = 1
-	}
-	else if (mutation.model == "SMM") {
-		mutation.model = 2
-	}
-	else {
-		stop("Unknown mutation model (must be one of 'IAM', 'KAM', or 'SMM')...")
-	}
-	SimulateIslandModel(number.of.simulations,mutation.model,total.number.of.demes,number.of.loci,number.of.sampled.demes,sample.sizes)
-	summary_stats <- as.matrix(read.table("sim_stats.out",header = TRUE))
-	file.remove("prior_val.in")
-	file.remove("sim_stats.out")
-	return(summary_stats)		
 }
 
 maximum.likelihood <- function(sample,alpha = 0.05,M = seq(0.1,9.99,0.1),pi = seq(0.01,0.99,0.01),graphics = TRUE,true.M,true.pi) {
@@ -397,5 +354,60 @@ run.mcmc <- function(sample,chain.length = 1000,burnin = 0,range.M = c(0.001,10)
 		}
 	}  	
   	return(as.mcmc(mcmc.chain))
+}
+
+generate.prior <- function(number.of.simulations,prior.theta,min.theta,max.theta,prior.M,min.M,max.M) {
+	if (prior.theta == "UNI") {
+		theta <- runif(number.of.simulations,min = min.theta,max = max.theta)
+	}
+	else if (prior.theta == "LOG") {
+		theta <- exp(runif(number.of.simulations,min = log(min.theta),max = log(max.theta)))
+	}
+	else {
+		stop("Unknown prior for theta (must be one of 'UNI' or 'LOG')...")
+	}
+	if (prior.M == "UNI") {
+		M <- runif(number.of.simulations,min = min.M,max = max.M)
+	}
+	else if (prior.M == "LOG") {
+		M <- exp(runif(number.of.simulations,min = log(min.M),max = log(max.M)))
+	}
+	else {
+		stop("Unknown prior for theta (must be one of 'UNI' or 'LOG')...")
+	}
+	prior <- as.matrix(cbind(theta,M))
+	write.table(file = "prior_val.in",prior,col.names = FALSE,row.names = FALSE,quote = FALSE)
+	return(data.frame(prior))
+}
+
+sim.island.model <- function(number.of.simulations,mutation.model,total.number.of.demes,number.of.loci,number.of.sampled.demes,sample.sizes) {
+	if (mutation.model == "IAM") {
+		mutation.model = 0
+	}
+	else if (mutation.model == "KAM") {
+		mutation.model = 1
+	}
+	else if (mutation.model == "SMM") {
+		mutation.model = 2
+	}
+	else {
+		stop("Unknown mutation model (must be one of 'IAM', 'KAM', or 'SMM')...")
+	}
+	SimulateIslandModel(number.of.simulations,mutation.model,total.number.of.demes,number.of.loci,number.of.sampled.demes,sample.sizes)
+	summary_stats <- as.matrix(read.table("sim_stats.out",header = TRUE))
+	file.remove("prior_val.in")
+	file.remove("sim_stats.out")
+	return(data.frame(summary_stats))
+}
+
+prcp.ca <- function(stats,target,...) {
+	scaled.stats <- scale(stats)
+	scaled.target <- (target - colMeans(stats)) / apply(stats,2,sd)
+	pca <- dudi.pca(scaled.stats,scannf = FALSE,nf = 2)
+	pca.target <- t(pca$c1) %*% t(scaled.target)
+	percentage <- pca$eig / sum(pca$eig) * 100
+	plot(pca$li,pty = 1,cex = 0.1,xlab = paste("Dimension 1 (",format(percentage[1],digits = 3),"%)",sep = ""),ylab = paste("Dimension 2 (",format(percentage[2],digits = 3),"%)",sep = ""),main = "Principal Compenent Analysis",cex.lab = 1.25,cex.main = 1.5,...)
+	points(pca.target[1],pca.target[2],col = "red",pch = 16,cex = 1.75)
+	return(pca)
 }
 
